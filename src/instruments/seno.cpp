@@ -30,7 +30,9 @@ seno::seno(const std::string &param): adsr(SamplingRate, param) {
   index = 0;
   for (int i=0; i < N ; ++i) {
     tbl[i] = sin(phase);
-    //cout << tbl[i] << "\n";
+    /*Para obtener el fichero tbl.txt habilitar el comment de abajo y en el terminal 
+    poner la línea que crea el .wav añadir al final de la cual añadiremos >tbl.txt*/
+    //cout << tbl[i] << "\n"; 
     phase += step;
   }
 }
@@ -43,7 +45,7 @@ void seno::command(long cmd, long note, long vel) {
     index = 0;
 	  A = vel / 127.;
     //adding the note: A
-    float f0 = (440.00*pow(2,((float)note-69.00)/12.00))/16000; 
+    float f0 = (440.00*pow(2,((float)note-69.00)/12.00))/SamplingRate; 
     step = tbl.size()*f0;
   }
   else if (cmd == 8) {	//'Key' released: sustain ends, release begins
@@ -65,10 +67,13 @@ const vector<float> & seno::synthesize() {
     return x;
   
   for (unsigned int i=0; i<x.size(); ++i) {
-    if (index == tbl.size())
+    if (round(index*step) == tbl.size())
       index = 0;
-    x[i] = 0.5*A * tbl[index*step]; 
-    cout << x[i] << "\n";
+
+    x[i] = A * tbl[round(index*step)]; 
+    /*Para obtener el fichero x.txt habilitar el comment de abajo y en el terminal 
+    poner la línea que crea el .wav añadir al final de la cual añadiremos >x.txt*/
+    //cout << x[i] << "\n";
     index++;
   } 
   adsr(x); //apply envelope to x and update internal status of ADSR

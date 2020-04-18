@@ -13,3 +13,5 @@ plot(len2,tbl,'o');
 title('Gráfica de la práctcia 5');
 legend('x','tbl');
 hold off;
+
+figure;
