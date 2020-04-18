@@ -27,6 +27,14 @@ permitan visualizar el funcionamiento de la curva ADSR.
 
 * Un instrumento con una envolvente ADSR genérica, para el que se aprecie con claridad cada uno de sus
   parámetros: ataque (A), caída (D), mantenimiento (S) y liberación (R).
+
+INSTRUMENTO GENÉRICO:
+	
+Para realizarlo hemos decidido los siguientes parámetros:
+
+1    InstrumentDumb    ADSR_A=0.02; ADSR_D=0.1; ADSR_S=0.4; ADSR_R=0.1; N=40;
+ (falta grafica)
+
 * Un instrumento *percusivo*, como una guitarra o un piano, en el que el sonido tenga un ataque rápido, no
   haya mantenimiemto y el sonido se apague lentamente.
   - Para un instrumento de este tipo, tenemos dos situaciones posibles:
@@ -34,9 +42,30 @@ permitan visualizar el funcionamiento de la curva ADSR.
     * El intérprete da por finalizada la nota antes de su completa extinción, iniciándose una disminución
 	  abrupta del sonido hasta su finalización.
   - Debera representar en esta memoria **ambos** posibles finales de la nota.
+
+INSTRUMENTO GUITARRA: (falta todo)
+
+Para realizarlo hemos decidido los siguientes parámetros:
+(falta grafica)
+
+INSTRUMENTO PIANO:
+	
+Para realizarlo hemos decidido los siguientes parámetros:
+
+1   InstrumentDumb    ADSR_A=0.005; ADSR_D=0.5; ADSR_S=0.05; ADSR_R=0.1; N=40;
+(falta grafica)
+
+
 * Un instrumento *plano*, como los de cuerdas frotadas (violines y semejantes) o algunos de viento. En
   ellos, el ataque es relativamente rápido hasta alcanzar el nivel de mantenimiento (sin sobrecarga), y la
   liberación también es bastante rápida.
+
+INSTRUMENTO PLANO:
+ 
+Para realizarlo hemos decidido los siguientes parámetros:
+
+1    InstrumentDumb    ADSR_A=0.07; ADSR_D=0.3; ADSR_S=1; ADSR_R=0.125; N=40;
+(falta grafica)
 
 Para los cuatro casos, deberá incluir una gráfica en la que se visualice claramente la curva ADSR. Deberá
 añadir la información necesaria para su correcta interpretación, aunque esa información puede reducirse a
