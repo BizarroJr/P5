@@ -1,5 +1,6 @@
 clear all;
 close all;
+
 tbl = readmatrix('tbl.txt');
 x = readmatrix ('x_shrt.txt');
 
