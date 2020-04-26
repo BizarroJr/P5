@@ -29,12 +29,13 @@ permitan visualizar el funcionamiento de la curva ADSR.
   parámetros: ataque (A), caída (D), mantenimiento (S) y liberación (R).
 
 INSTRUMENTO GENÉRICO:
-	
+---------------------	
 Para realizarlo hemos decidido los siguientes parámetros:
 
 1    InstrumentDumb    ADSR_A=0.02; ADSR_D=0.1; ADSR_S=0.4; ADSR_R=0.1; N=40;
 
-Como vemos la fase de ataque es más o menos igual de pronunciada que la liberación. Hemos decidido que la caída sea larga y el mantenimiento tenga una duración corta. El instrumento genérico se ve así:
+Como vemos la fase de ataque es más o menos igual de pronunciada que la liberación. Hemos decidido que la caída sea larga y el 
+mantenimiento tenga una duración corta. El instrumento genérico se ve así:
 
  <img src="Imagenes/1_generico.png" width="640" align="center">
 
@@ -47,7 +48,7 @@ Como vemos la fase de ataque es más o menos igual de pronunciada que la liberac
   - Debera representar en esta memoria **ambos** posibles finales de la nota.
 
 INSTRUMENTO PERCUSIVO 1: 
-
+------------------------
 Para realizarlo hemos decidido los siguientes parámetros:
 
 1   InstrumentDumb    ADSR_A=0.005; ADSR_D=0.5; ADSR_S=0.05; ADSR_R=0.1; N=40;
@@ -61,8 +62,9 @@ Y en global queda así:
 <img src="Imagenes/2_percu1_sinzoom.png" width="640" align="center">
 
 INSTRUMENTO PERCUSIVO 2: 
-	
-Para realizarlo hemos decidido los parámetros anteriores, salvo que en este caso hemos decidido incluir un pequeño delay el doremi.sco  después de la primera nota quedando así:
+------------------------	
+Para realizarlo hemos decidido los parámetros anteriores, salvo que en este caso hemos decidido incluir un pequeño delay el doremi.sco  
+después de la primera nota quedando así:
 
                   (60  8   1   60  10)
 
@@ -73,7 +75,7 @@ Para realizarlo hemos decidido los parámetros anteriores, salvo que en este cas
   liberación también es bastante rápida.
 
 INSTRUMENTO PLANO:
- 
+------------------ 
 Para realizarlo hemos decidido los siguientes parámetros:
 
 1    InstrumentDumb    ADSR_A=0.07; ADSR_D=0.3; ADSR_S=1; ADSR_R=0.125; N=40;
@@ -186,17 +188,20 @@ Podemos obtener la frecuencia fundamental quedando de la siguiente forma:
 
                     f0=440^2(note-69)/12
 
-Para calcular el valor del 'step', debemos tener en cuenta que la frecuencia del seno que ha generado la tabla es modificable según la velocidad a la que esta se recorre. Por ello cada 'step' resulta como:
+Para calcular el valor del 'step', debemos tener en cuenta que la frecuencia del seno que ha generado la tabla es modificable según la 
+velocidad a la que esta se recorre. Por ello cada 'step' resulta como:
 
                     step=f0*longitudTabla/fm
 
-Por tanto deberíamos recorrer la tabla con cada 'step' que se da, y en caso de que el valor del índice en que nos encontramos supere el de la longitud de la tabla, entonces el algoritmo que planteamos debería hacer que el índice retornase a 0 volviendoa empezar.
+Por tanto deberíamos recorrer la tabla con cada 'step' que se da, y en caso de que el valor del índice en que nos encontramos supere el 
+de la longitud de la tabla, entonces el algoritmo que planteamos debería hacer que el índice retornase a 0 volviendoa empezar.
 
 La gráfica nos queda así:
 
 <img src="Imagenes/10_grafmatlabpocha.png" width="640" align="center">
 
-Creemos que la gráfica debería salir de forma que las amplitudes de ambas senoides fueran las mismas así como su periodo, pero esto no es así como podemos ver.
+Creemos que la gráfica debería salir de forma que las amplitudes de ambas senoides fueran las mismas así como su periodo, pero esto no 
+es así como podemos ver.
 
 - Si ha implementado la síntesis por tabla almacenada en fichero externo, incluya a continuación el código
   del método `command()`.
@@ -227,17 +232,180 @@ Comparando el seno sin nada, con tremolo y con vibrato de cerca:
   Seno vibrato:
 <img src="Imagenes/9_senovibrazoom.png" width="640" align="center">
 
-Como vemos el seno con trémolo genera ondulaciones en la amplitud del señal temporal mientras que el  vibrato presenta ondulaciones en el espectrograma.
+Como vemos el seno con trémolo genera ondulaciones en la amplitud del señal temporal mientras que el  vibrato 
+presenta ondulaciones en el espectrograma.
 
 - Si ha generado algún efecto por su cuenta, explique en qué consiste, cómo lo ha implementado y qué
   resultado ha producido. Incluya, en el directorio `work/ejemplos`, los ficheros necesarios para apreciar
   el efecto, e indique, a continuación, la orden necesaria para generar los ficheros de audio usando el
   programa `synth`.
+  
+  synth dumb.orc doremi.sco [fichero].wav -e effects.orc
+
+Distorsión
+-----------
+Basándonos en pedales clásicos de guitarra hemos querido implementar un efecto que "sature" el señal y nos 
+permita encontrar ese sonido de "amplificador roto". El planteamiento ha sido muy sencillo, marcar un 
+umbral (en valor absoluto, para cortar por arriba y por debajo) y a partir de allí poner cualquier valor a 
+un mismo valor (saturación). El umbral lo entramos por el [.orc] con el nombre Th. Para apreciar bien el 
+sonido de la distorsión se ha implementado un "clarinete" distorsionado, donde se puede apreciar mejor. 
+El sonido guitarra lleva incorporado este sonido.
+
+	Código:
+	#include <iostream>
+	#include <math.h>
+	#include "superdistor.h"
+	#include "keyvalue.h"
+
+	#include <stdlib.h>
+
+	using namespace upc;
+	using namespace std;
+
+	//static float SamplingRate = 44100;
+
+	Distor::Distor(const std::string &param) {
+	  fase = 0;
+
+	  KeyValue kv(param);
+
+	  if (!kv.to_float("A", A))
+	    A = 1; //Booster per la distorsió (podria estar fent un solo)
+
+	  if (!kv.to_float("Th", Th))
+	    Th = 0.4; //Quantitat de distorsió
+
+	}
+
+	void Distor::command(unsigned int comm) {
+	  if (comm == 1) fase = 0;
+	}
+
+	void Distor::operator()(std::vector<float> &x){
+	  for (unsigned int i = 0; i < x.size(); i++) {
+	    if(x[i] > Th){
+	      x[i] = Th;
+	    }
+	    else if(x[i] < -Th) {
+	      x[i] = -Th;
+	    }
+
+	    x[i] = A * x[i];   
+	  }
+	}
+
+<img src="Imagenes/distormostra.jpg" width="640" align="center">
+
+Se observa que los senos se han convertido en señales casi cuadradas, saturando así el señal (factor Th = 0.8). 
 
 
-(ERIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIC)
+Chorus:
+------
+También se ha basado este efecto en los famosos pedales de guitarra. Su funcionamiento es sumar a la señal
+original la misma señal pero con una variación de pitch baja (desafinando un poco el sonido de la nota
+principal). Esta suma debe ser ponderada para que se aprecie el sonido original de la nota.
 
+	Código:
+	Chorus::Chorus(const std::string &param) {
+	  KeyValue kv(param);
 
+	  // I is the maximum downward pitch shift in semitones
+	  // As the shift is sinusoidal, the maximum posible shift is 2 (one octave)
+	  // In this way, we prevent negative shifts
+	  if (!kv.to_float("I", I))
+	    I = 0.5; //default downward variation shift in semitones
+		//Cambio del valor default para intentar que suene como el pedal 
+		//analógico MXR Chorus. 
+
+	  // Pass I in semitones to linear I
+	  I = 1. - pow(2, -I / 12.);
+
+	  if (!kv.to_float("fm", fm))
+	    fm = 10; //default value
+
+		//How much effect do you want
+	  if (!kv.to_float("A", A))
+		A = 0.25; //default value
+
+	  fase_sen = 0;
+	  fase_mod = 0;
+
+	  inc_fase_mod = 2 * M_PI * fm / SamplingRate;
+	}
+
+	void Chorus::command(unsigned int cmd) {
+	  fase_mod = 0;
+	  if (cmd == 0) buffer.resize(0);
+	}
+
+	void Chorus::operator()(std::vector<float> &x){
+		std::vector<float> xout(x.size());
+		unsigned int tot = 0;
+		float	xant, xpos, rho;
+
+		// Usamos resta en la modulación para garantizar que no nos quedaremos sin
+		// muestras en el vector x: fase_sen += 1 - I * sin(fase_mod).
+		//
+		// En el fondo, esta trampa permite garantizar que el sistema es siempre causal...
+
+		// Si el buffer no está vacío tomamos los valores de él hasta vaciarlo (o no).
+		for (tot = 0; fase_sen < buffer.size() and tot < x.size(); tot++) {
+			xant = buffer[(int) fase_sen];
+			xpos = ((unsigned int) fase_sen < buffer.size() - 1 ? buffer[(int) fase_sen + 1] : x[0]);
+			rho = fase_sen - (int) fase_sen;
+
+			xout[tot] = xant + rho * (xpos - xant);
+
+			fase_sen += 1 - I * sin(fase_mod);
+			fase_mod += inc_fase_mod;
+		}
+		if (fase_sen > buffer.size()) {
+			fase_sen -= buffer.size();
+			buffer.resize(0);
+		}
+		else {
+			buffer.erase(buffer.begin(), buffer.begin() + (int) fase_sen);
+			fase_sen -= (int) fase_sen;
+		}
+
+		// Completamos la señal con muestras del vector actual
+		while (tot < x.size()) {
+			// Si podemos, interpolamos; si no, extrapolamos
+			if (fase_sen < x.size() - 1) {
+				xant = x[(int) fase_sen];
+				xpos = x[(int) fase_sen + 1];
+				rho = fase_sen - (int) fase_sen;
+			}
+			else {
+				xant = x[(int) fase_sen - 1];
+				xpos = x[(int) fase_sen];
+				rho = fase_sen - (int) fase_sen + 1;
+			}
+			xout[tot] = A * (xant + rho * (xpos - xant)) + x[tot];
+
+			if (++tot < x.size()) {
+				fase_sen += 1 - I * sin(fase_mod);
+				fase_mod += inc_fase_mod;
+			}
+		}
+
+		// Guardamos los valores restantes de x en el buffer
+		buffer.insert(buffer.end(), x.begin() + (int) fase_sen, x.end());
+		fase_sen -= (int) fase_sen;
+
+		while (fase_mod > M_PI) fase_mod -= 2 * M_PI;
+
+		// Un chorus no deja de ser la adición a la señal original de muestras "desafinadas" 
+		// un valor concreto respecto la original que está sonando, así que si el señal es 
+		// causal solo hace falta que a la original le añadamos la vibrada con el valor de
+		// ponderación deseado.
+		x = xout;
+	}
+	
+<img src="Imagenes/cohrusmostra.jpg" width="640" align="center">
+
+El valor de I debe ser bajo para no causar un vibrato muy potente.
+	
 ### Síntesis FM.
 
 Construya un instrumento de síntesis FM, según las explicaciones contenidas en el enunciado y el artículo
@@ -265,6 +433,7 @@ N1=3; N2=2; I=0.0001;
     ejemplo, violines, pianos, percusiones, espadas láser de la
 	[Guerra de las Galaxias](https://www.starwars.com/), etc.
 
+	Se han generado: Bombo, caja, fagot, "guitarra".
 ### Orquestación usando el programa synth.
 
 Use el programa `synth` para generar canciones a partir de su partitura MIDI. Como mínimo, deberá incluir la
@@ -277,6 +446,8 @@ Use el programa `synth` para generar canciones a partir de su partitura MIDI. Co
 - Indique, a continuación, la orden necesaria para generar la señal (suponiendo que todos los archivos
   necesarios están en directorio indicado).
 
+synth ToyStory.orc ToyStory_A_Friend_in_me.sco ToyStory.wav
+
 También puede orquestar otros temas más complejos, como la banda sonora de *Hawaii5-0* o el villacinco de
 John Lennon *Happy Xmas (War Is Over)* (fichero `The_Christmas_Song_Lennon.sco`), o cualquier otra canción
 de su agrado o composición. Se valorará la riqueza instrumental, su modelado y el resultado final.
@@ -284,4 +455,38 @@ de su agrado o composición. Se valorará la riqueza instrumental, su modelado y
   `work/music`.
 - Indique, a continuación, la orden necesaria para generar cada una de las señales usando los distintos ficheros.
 
-(ERIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIC)
+synth Hawaii.orc Hawaii5-0.sco HawaiiInfernal2.wav
+
+Para el disfrute de la realización de la práctica y aposentar los conocimientos 
+adquiridos en esta hemos orquestrado varias canciones:
+La Gasolina - Daddy Yankee 
+--------------------------
+// Canción de culto para cualquier verbena. Solo 1 instument
+synth Gasolina.orc Gasolina.sco gasolina.wav
+Layla - Derek&The Dominos (Eric Clapton)
+-----------------------------------------
+//Canción de Blues/Rock mítica con complicados pasajes a nivel interpretativo. 
+Nos ha servido para ver si nuestros sonidos conseguien enfrentarse a curiosidades
+musicales como los bendings, slides, hammer-ons y rapidos cambios de velocidad.
+synth Layla.orc Layla.sco Layla.wav
+Never Gonna Give You Up - Rick Astley
+-------------------------------------
+//Su [.orc] incluye 9 instrumentos distintos, obligándonos a cambiar parámetros 
+de instrumentos para repetirlos más de una vez si que suene a que todo es el mismo
+instrumento. 
+synth NeverGonna.orc NevergonnaGiveU.sco NeverGonnaGiveYouUp.wav
+One Stpe Beyond - Madness
+--------------------------
+//[.orc] cuenta con 5 instrumentos con uno que resalta especialmente melodicamente
+y los otros siendo totalmente ritmicos. Utilizado para comprovar si nuestros sonidos 
+tienen algún sentido musical. 
+synth 1step.orc 1step.sco onestepbeyond.wav
+
+Finalmente podemos concretar que los instrumentos que nos han sido más fáciles son los 
+percusivos. Como se puede observar en "You've got a friend on me" hasta siendo usados 
+como bajo quedan resultones. En "La Gasolina" también se han usado solo instrumentos
+percusivos con un "magnífico" resultado. Los instrumentos de viento de caña simple 
+han resultado sonar todos como flautas de pan con distintos rangos frecuenciales 
+mientras que la guitarra semeja un teclado Casio Midi clásico. El viento metal ha sido
+nuestra asignatura pendiente, ya que solo conseguimos reproducir sonidos "afinados" de 
+ruido blanco. 
