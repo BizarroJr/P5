@@ -1,0 +1,16 @@
+1   Kick    ADSR_A=0.0001; ADSR_D=0.5; ADSR_S=0.01; ADSR_R=0.1; N=40; N1=0; N2=25; vel=0.2;
+2   Snare   ADSR_A=0.0001; ADSR_D=0.7; ADSR_S=0.1; ADSR_R=0.1; N=40; N1=0; N2=25; vel=0.2;   
+3   Bell    ADSR_A=0.001; ADSR_D=0.1; ADSR_S=0.001; ADSR_R=0.8; N=40; N1=0; N2=10; vel=0.2;    
+4   Kick    ADSR_A=0.0001; ADSR_D=0.5; ADSR_S=0.01; ADSR_R=0.1; N=40; N1=2; N2=25; vel=0.2;
+5   Snare   ADSR_A=0.0001; ADSR_D=0.5; ADSR_S=0.01; ADSR_R=0.1; N=40; N1=12; N2=25; vel=0.2;
+6   Kick    ADSR_A=0.0001; ADSR_D=0.5; ADSR_S=0.01; ADSR_R=0.1; N=40; N1=5; N2=25; vel=0.2;
+7   Fagot   ADSR_A=0.5; ADSR_D=0.025; ADSR_S=1.5; ADSR_R=0.5; N=40; N1=0; N2=1.5; vel=0.8;
+8   Guitar    ADSR_A=0.001; ADSR_D=0.3; ADSR_S=0.6; ADSR_R=0.1; N=40; N1=4; N2=2; vel=0.2; Th=0.8;
+9   Woodwind    ADSR_A=0.1; ADSR_D=0.005; ADSR_S=0.3; ADSR_R=0.1; N=40; N1=4; N2=2; vel=1;
+10  Woodwind    ADSR_A=0.1; ADSR_D=0.005; ADSR_S=0.3; ADSR_R=0.1; N=40; N1=4; N2=2; vel=0.75;
+11  Bell    ADSR_A=0.001; ADSR_D=0.1; ADSR_S=0.001; ADSR_R=0.8; N=40; N1=0; N2=10; vel=0.2;
+12  Woodwind    ADSR_A=0.1; ADSR_D=0.005; ADSR_S=0.3; ADSR_R=0.1; N=40; N1=4; N2=2; vel=0.3;
+13  Sinfm1  ADSR_A=0.02; ADSR_D=0.1; ADSR_S=0.4; ADSR_R=0.1; N=40; N1=3; N2=2; I=0.00001;
+14  Woodwind    ADSR_A=0.1; ADSR_D=0.005; ADSR_S=0.3; ADSR_R=0.1; N=40; N1=4; N2=2; vel=0.5;
+15  Woodwind    ADSR_A=0.1; ADSR_D=0.005; ADSR_S=0.3; ADSR_R=0.1; N=40; N1=4; N2=2; vel=0.5;
+16  Sinfm1  ADSR_A=0.02; ADSR_D=0.1; ADSR_S=0.4; ADSR_R=0.1; N=40; N1=3; N2=2; I=0.00001;

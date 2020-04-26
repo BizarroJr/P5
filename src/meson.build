@@ -8,6 +8,10 @@ sources = [
 	'instruments/campana.cpp',
 	'instruments/woodwind.cpp',
 	'instruments/genericins.cpp',
+	'instruments/fagot.cpp',
+	'instruments/kick.cpp',
+	'instruments/guitar.cpp',
+	'instruments/snare.cpp',
 	'synth/envelope_adsr.cpp',
 	'synth/midi_score.cpp',
 	'synth/multinote_instr.cpp',
@@ -16,6 +20,8 @@ sources = [
 	'effects/effect.cpp',
 	'effects/tremolo.cpp',
 	'effects/vibrato.cpp',
+	'effects/chorus.cpp',
+	'effects/superdistor.cpp',
 ]
 
 executable(

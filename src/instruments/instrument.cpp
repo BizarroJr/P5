@@ -5,6 +5,10 @@
 #include "campana.h"
 #include "woodwind.h"
 #include "genericins.h"
+#include "fagot.h"
+#include "kick.h"
+#include "guitar.h"
+#include "snare.h"
 
 /*
   For each new instrument:
@@ -37,6 +41,18 @@ namespace upc {
     }
     else if (name == "genericins"){
       pInst = (Instrument*) new genericins(parameters);
+    }
+    else if (name == "Fagot") {
+      pInst = (Instrument*) new Fagot(parameters);
+    }
+    else if (name == "Kick") {
+      pInst = (Instrument*) new Kick(parameters);
+    }
+    else if (name == "Guitar") {
+      pInst = (Instrument*) new Guitar(parameters);
+    }
+    else if (name == "Snare") {
+      pInst = (Instrument*) new Snare(parameters);
     }
     return pInst;
   }
