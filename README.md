@@ -214,7 +214,7 @@ El seno con trémolo es el siguiente:
 
 El seno con vibrato es el siguiente:
 
-<img src="Imagenes/6_senovibragloblal.png" width="640" align="center">
+<img src="Imagenes/6_senovibraglobal.png" width="640" align="center">
 
 Comparando el seno sin nada, con tremolo y con vibrato de cerca:
 
