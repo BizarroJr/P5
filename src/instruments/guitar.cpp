@@ -86,7 +86,7 @@ const vector<float> & Guitar::synthesize() {
   adsr(h);
   
   for (unsigned int i=0; i<x.size(); ++i) {
-    x[i] = 1.5*A*sin(teta+(((h[i]+N1*fm)/SamplingRate)*sin(phi)));
+    x[i] = 0.25*A*sin(teta+(((h[i]+N1*fm)/SamplingRate)*sin(phi)));
     //1.5 para hacer boost
     //Distorsión.
     if(x[i] > Th) {

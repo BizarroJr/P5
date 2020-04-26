@@ -90,7 +90,7 @@ const vector<float> & Sinfm1::synthesize() {
     if (round(index*step) == tbl.size()){
       index = 0;
     }
-    x[i] = A * tbl[round(index*step)];
+    x[i] = 0.25*A * tbl[round(index*step)];
     index+= (1 + (I*sin(fase_mod)/step));
     fase_mod += inc_fase_mod;
   }

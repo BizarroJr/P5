@@ -87,7 +87,7 @@ const vector<float> & Bell::synthesize() {
   adsr(h);
   
   for (unsigned int i=0; i<x.size(); ++i) {
-    x[i] = A*sin(teta+(((h[i]+N1*fm)/SamplingRate)*sin(phi)));
+    x[i] =0.25*A*sin(teta+(((h[i]+N1*fm)/SamplingRate)*sin(phi))); //El 0.25 es para que no distorsione
 
     teta+=alfa;
     phi+=beta;

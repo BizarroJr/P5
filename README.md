@@ -36,7 +36,7 @@ Para realizarlo hemos decidido los siguientes parámetros:
 
 Como vemos la fase de ataque es más o menos igual de pronunciada que la liberación. Hemos decidido que la caída sea larga y el mantenimiento tenga una duración corta. El instrumento genérico se ve así:
 
- (falta grafica)
+ <img src="Imagenes/1_generico.png" width="640" align="center">
 
 * Un instrumento *percusivo*, como una guitarra o un piano, en el que el sonido tenga un ataque rápido, no
   haya mantenimiemto y el sonido se apague lentamente.
@@ -54,11 +54,11 @@ Para realizarlo hemos decidido los siguientes parámetros:
 
 Ampliado vemos esto:
 
-(falta grafica)
+<img src="Imagenes/2_percu1.png" width="640" align="center">
 
 Y en global queda así:
 
-(falta grafica)
+<img src="Imagenes/2_percu1_sinzoom.png" width="640" align="center">
 
 INSTRUMENTO PERCUSIVO 2: 
 	
@@ -66,7 +66,7 @@ Para realizarlo hemos decidido los parámetros anteriores, salvo que en este cas
 
                   (60  8   1   60  10)
 
-(falta grafica)
+<img src="Imagenes/2_percu2.png" width="640" align="center">
 
 * Un instrumento *plano*, como los de cuerdas frotadas (violines y semejantes) o algunos de viento. En
   ellos, el ataque es relativamente rápido hasta alcanzar el nivel de mantenimiento (sin sobrecarga), y la
@@ -78,7 +78,7 @@ Para realizarlo hemos decidido los siguientes parámetros:
 
 1    InstrumentDumb    ADSR_A=0.07; ADSR_D=0.3; ADSR_S=1; ADSR_R=0.125; N=40;
 
-(falta grafica)
+<img src="Imagenes/3_plano.png" width="640" align="center">
 
 Para los cuatro casos, deberá incluir una gráfica en la que se visualice claramente la curva ADSR. Deberá
 añadir la información necesaria para su correcta interpretación, aunque esa información puede reducirse a
@@ -194,7 +194,9 @@ Por tanto deberíamos recorrer la tabla con cada 'step' que se da, y en caso de 
 
 La gráfica nos queda así:
 
-(falta grafica)
+<img src="Imagenes/10_grafmatlabpocha.png" width="640" align="center">
+
+Creemos que la gráfica debería salir de forma que las amplitudes de ambas senoides fueran las mismas así como su periodo, pero esto no es así como podemos ver.
 
 - Si ha implementado la síntesis por tabla almacenada en fichero externo, incluya a continuación el código
   del método `command()`.
@@ -208,11 +210,22 @@ La gráfica nos queda así:
 
 El seno con trémolo es el siguiente:
 
-(falta grafica)
+<img src="Imagenes/5_senotermologloblal.png" width="640" align="center">
 
 El seno con vibrato es el siguiente:
 
-(falta grafica)
+<img src="Imagenes/6_senovibragloblal.png" width="640" align="center">
+
+Comparando el seno sin nada, con tremolo y con vibrato de cerca:
+
+  Seno simple:
+<img src="Imagenes/7_senozoom.png" width="640" align="center">
+
+  Seno tremolo:
+<img src="Imagenes/8_senotremozoom.png" width="640" align="center">
+
+  Seno vibrato:
+<img src="Imagenes/9_senovibrazoom.png" width="640" align="center">
 
 Como vemos el seno con trémolo genera ondulaciones en la amplitud del señal temporal mientras que el  vibrato presenta ondulaciones en el espectrograma.
 
@@ -220,6 +233,10 @@ Como vemos el seno con trémolo genera ondulaciones en la amplitud del señal te
   resultado ha producido. Incluya, en el directorio `work/ejemplos`, los ficheros necesarios para apreciar
   el efecto, e indique, a continuación, la orden necesaria para generar los ficheros de audio usando el
   programa `synth`.
+
+
+(ERIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIC)
+
 
 ### Síntesis FM.
 
@@ -231,9 +248,12 @@ deberá venir expresado en semitonos.
 - Use el instrumento para generar un vibrato de *parámetros razonables* e incluya una gráfica en la que se
   vea, claramente, la correspondencia entre los valores `N1`, `N2` e `I` con la señal obtenida.
 
+
+El vibratoFM nos resulta de la siguiente froma con los parámetros siguientes:
+
 N1=3; N2=2; I=0.0001;
 
-
+<img src="Imagenes/11_vibrafm.png" width="640" align="center">
 
 
 - Use el instrumento para generar un sonido tipo clarinete y otro tipo campana. Tome los parámetros del
@@ -262,5 +282,6 @@ John Lennon *Happy Xmas (War Is Over)* (fichero `The_Christmas_Song_Lennon.sco`)
 de su agrado o composición. Se valorará la riqueza instrumental, su modelado y el resultado final.
 - Coloque los ficheros generados, junto a sus ficheros `score`, `instruments` y `efffects`, en el directorio
   `work/music`.
-- Indique, a continuación, la orden necesaria para generar cada una de las señales usando los distintos
-  ficheros.
+- Indique, a continuación, la orden necesaria para generar cada una de las señales usando los distintos ficheros.
+
+(ERIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIC)

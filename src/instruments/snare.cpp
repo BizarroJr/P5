@@ -85,7 +85,7 @@ const vector<float> & Snare::synthesize() {
   adsr(h);
   
   for (unsigned int i=0; i<x.size(); ++i) {
-    x[i] = A*sin(teta+(((h[i]+N1*fm)/SamplingRate)*sin(phi)));
+    x[i] = 0.25*A*sin(teta+(((h[i]+N1*fm)/SamplingRate)*sin(phi)));
 
     teta+=alfa;
     phi+=beta;
