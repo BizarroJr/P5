@@ -61,13 +61,17 @@ Y en global queda así:
 
 <img src="Imagenes/2_percu1_sinzoom.png" width="640" align="center">
 
+Como vemos tiene un ataque muy pronunciado, pero la extinción de la nota es lenta.
+
 INSTRUMENTO PERCUSIVO 2: 
 ------------------------	
-Para realizarlo hemos decidido los parámetros anteriores, salvo que en este caso hemos decidido incluir un pequeño delay el doremi.sco después de la primera nota quedando así:
+Para realizarlo hemos decidido los parámetros:
 
-                  (60  8   1   60  10)
+1    InstrumentDumb 	ADSR_A=0.01; ADSR_D=0.3; ADSR_S=0.01; ADSR_R=0.001; N=40;
 
-<img src="Imagenes/2_percu2.png" width="640" align="center">
+<img src="2_percu2revisado.png" width="640" align="center">
+
+Como vemos tiene un ataque muy pronunciado también y la extinción de la nota se produce de forma immediata.
 
 * Un instrumento *plano*, como los de cuerdas frotadas (violines y semejantes) o algunos de viento. En
   ellos, el ataque es relativamente rápido hasta alcanzar el nivel de mantenimiento (sin sobrecarga), y la
@@ -80,6 +84,8 @@ Para realizarlo hemos decidido los siguientes parámetros:
 1    InstrumentDumb    ADSR_A=0.07; ADSR_D=0.3; ADSR_S=1; ADSR_R=0.125; N=40;
 
 <img src="Imagenes/3_plano.png" width="640" align="center">
+
+Hemos tratado que el ataque y la liberación furan similares, y vemos como tanto la fase de caída y mantenimiento se producen al mismo nivel.
 
 Para los cuatro casos, deberá incluir una gráfica en la que se visualice claramente la curva ADSR. Deberá
 añadir la información necesaria para su correcta interpretación, aunque esa información puede reducirse a
