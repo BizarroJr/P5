@@ -1,15 +1,13 @@
 #include <iostream>
 #include <math.h>
-#include "sintesisFM.h"
+#include "genericins.h"
 #include "keyvalue.h"
-
 #include <stdlib.h>
 
 using namespace upc;
 using namespace std;
 
-sintesisFM::sintesisFM(const std::string &param) 
-  : adsr(SamplingRate, param) {
+genericins::genericins(const std::string &param): adsr(SamplingRate, param) {
   bActive = false;
   x.resize(BSIZE);
 
@@ -18,16 +16,23 @@ sintesisFM::sintesisFM(const std::string &param)
     Take a Look at keyvalue.h    
   */
   KeyValue kv(param);
-  int N;
-  float note, fo, dif, dim;
+  int N; 
 
   if (!kv.to_int("N",N))
     N = 40; //default value
   
-  N1 = 1;
-  N2 =8;
-  I = 0.5;
+  if (!kv.to_float("vel",vel))
+    vel = 0.5; //Default 
   
+  if (!kv.to_float("fm",fm))
+    fm = 5; //Default
+
+  fc = 7500; 
+  fmod = 8100; 
+  N1 = 10;
+  N2 = 7;
+
+  cm = fmod/fc;
   //Create a tbl with one period of a sinusoidal wave
   tbl.resize(N);
   float phase = 0, step = 2 * M_PI /(float) N;
@@ -39,23 +44,22 @@ sintesisFM::sintesisFM(const std::string &param)
 }
 
 
-void sintesisFM::command(long cmd, long note, long vel) {
+void genericins::command(long cmd, long note, long vel) {
   if (cmd == 9) {		//'Key' pressed: attack begins
     bActive = true;
     adsr.start();
     index = 0;
-	A = vel / 127.;
 
-    float F0 = (440.00*pow(2,((float)note-69.00)/12.00))/SamplingRate;
-    N1 = 1;
-    N2 = 7;
-    I = 0.00329;
-    float FC = N1*F0;
-    float FM = N2*F0;
+	  float f0 = (440.00*pow(2,((float)note-69.00)/12.00));
+    float d = f0/SamplingRate; 
+    fm = f0*cm;
+    float dfm = fm/SamplingRate;
+    A = vel/127.0F;
 
-    step = FC*tbl.size();
-    phase_m = 0;
-    alpha_m = 2*M_PI*FM;
+    alfa = 2*M_PI*d;
+    beta = 2*M_PI*dfm;
+    teta = 0;
+    phi = 0;
 
   }
   else if (cmd == 8) {	//'Key' released: sustain ends, release begins
@@ -67,25 +71,32 @@ void sintesisFM::command(long cmd, long note, long vel) {
 }
 
 
-const vector<float> & sintesisFM::synthesize() {
+const vector<float> & genericins::synthesize() {  
   if (not adsr.active()) {
     x.assign(x.size(), 0);
     bActive = false;
     return x;
   }
-  else if (not bActive)
+  else if (not bActive) {
     return x;
-
-  for (unsigned int i=0; i<x.size(); ++i) {
-    if (round(step*index) == tbl.size()){
-      index = 0;
-    }
-    x[i] = A*tbl[round(index)];
-    index += step*(1+I*sin(phase_m));
-    phase_m = (phase_m+alpha_m);
-    if(phase_m > 2*M_PI ) phase_m = 0;
   }
+  vector<float> h(x.size(), (N2-N1)*fm);
+  adsr(h);
+  
+  for (unsigned int i=0; i<x.size(); ++i) {
+    x[i] = A*sin(teta+(((h[i]+N1*fm)/SamplingRate)*sin(phi)));
 
+    teta+=alfa;
+    phi+=beta;
+    //Controlamos que esté siempre en la primera vuelta
+    //Si dejamos que pase de M_PI se acaba saliendo de los márgenes
+    while(teta>M_PI) {
+      teta-=2*M_PI;
+    }
+    while(phi>M_PI) {
+      phi-=2*M_PI;
+    }
+  }
   adsr(x); //apply envelope to x and update internal status of ADSR
 
   return x;

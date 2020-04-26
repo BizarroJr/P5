@@ -1,13 +1,13 @@
 #include <iostream>
 #include <math.h>
-#include "sinfm1.h"
+#include "campana.h"
 #include "keyvalue.h"
 #include <stdlib.h>
 
 using namespace upc;
 using namespace std;
 
-Sinfm1::Sinfm1(const std::string &param): adsr(SamplingRate, param) {
+Bell::Bell(const std::string &param): adsr(SamplingRate, param) {
   bActive = false;
   x.resize(BSIZE);
 
@@ -17,26 +17,25 @@ Sinfm1::Sinfm1(const std::string &param): adsr(SamplingRate, param) {
   */
   KeyValue kv(param);
   int N; 
-  float I, fm;
+
   if (!kv.to_int("N",N))
     N = 40; //default value
   
-  if (!kv.to_float("I",I))
-    I = 1; 
+  if (!kv.to_float("vel",vel))
+    vel = 0.5; //Default 
   
   if (!kv.to_float("fm",fm))
-    fm = 5;
-
-  if (!kv.to_float("N1",N1))
-    N1 = 4;
-    
-  if (!kv.to_float("N2",N2))
-    N2 = 2;
+    fm = 5; //Default
 
 
-I = 1. - pow(2, -I / 12.);
+  dTime = 15; 
+  Aout = 1000;
+  fc = 200; //Values from the paper
+  fmod = 280; 
+  N1 = 0;
+  N2 = 10;
 
-
+  cm = fmod/fc;
   //Create a tbl with one period of a sinusoidal wave
   tbl.resize(N);
   float phase = 0, step = 2 * M_PI /(float) N;
@@ -48,24 +47,23 @@ I = 1. - pow(2, -I / 12.);
 }
 
 
-void Sinfm1::command(long cmd, long note, long vel) {
-  
-/*  float inc_fase_mod = 0;
-  float fase_mod = 0;*/
+void Bell::command(long cmd, long note, long vel) {
   if (cmd == 9) {		//'Key' pressed: attack begins
     bActive = true;
     adsr.start();
     index = 0;
-	  A = vel / 127.;
-    //adding the note: A
-    float f0 = (440.00*pow(2,((float)note-69.00)/12.00))/SamplingRate; 
-    //step = tbl.size()*f0;
-    float feme = f0*N2;
-    float fdis = f0*N1;
 
-    step = tbl.size()*fdis;
-    inc_fase_mod = 2*M_PI*feme; 
-    fase_mod = 0;
+	  float f0 = (440.00*pow(2,((float)note-69.00)/12.00));
+    float d = f0/SamplingRate; 
+    fm = f0*cm;
+    float dfm = fm/SamplingRate;
+    A = vel/127.0F;
+
+    alfa = 2*M_PI*d;
+    beta = 2*M_PI*dfm;
+    teta = 0;
+    phi = 0;
+
   }
   else if (cmd == 8) {	//'Key' released: sustain ends, release begins
     adsr.stop();
@@ -76,8 +74,7 @@ void Sinfm1::command(long cmd, long note, long vel) {
 }
 
 
-const vector<float> & Sinfm1::synthesize() {
-  
+const vector<float> & Bell::synthesize() {  
   if (not adsr.active()) {
     x.assign(x.size(), 0);
     bActive = false;
@@ -86,13 +83,22 @@ const vector<float> & Sinfm1::synthesize() {
   else if (not bActive) {
     return x;
   }
+  vector<float> h(x.size(), (N2-N1)*fm);
+  adsr(h);
+  
   for (unsigned int i=0; i<x.size(); ++i) {
-    if (round(index*step) == tbl.size()){
-      index = 0;
+    x[i] = A*sin(teta+(((h[i]+N1*fm)/SamplingRate)*sin(phi)));
+
+    teta+=alfa;
+    phi+=beta;
+    //Controlamos que esté siempre en la primera vuelta
+    //Si dejamos que pase de M_PI se acaba saliendo de los márgenes
+    while(teta>M_PI) {
+      teta-=2*M_PI;
     }
-    x[i] = A * tbl[round(index*step)];
-    index+= (1 + (I*sin(fase_mod)/step));
-    fase_mod += inc_fase_mod;
+    while(phi>M_PI) {
+      phi-=2*M_PI;
+    }
   }
   adsr(x); //apply envelope to x and update internal status of ADSR
 

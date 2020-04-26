@@ -2,6 +2,9 @@
 #include "instrument_dumb.h"
 #include "seno.h"
 #include "sinfm1.h"
+#include "campana.h"
+#include "woodwind.h"
+#include "genericins.h"
 
 /*
   For each new instrument:
@@ -23,8 +26,17 @@ namespace upc {
     else if (name == "seno"){
       pInst = (Instrument*) new seno(parameters);
     }
-    else if (name == "sinfm1"){
+    else if (name == "Sinfm1"){
       pInst = (Instrument*) new Sinfm1(parameters);
+    }
+    else if (name == "Bell"){
+      pInst = (Instrument*) new Bell(parameters);
+    }
+    else if (name == "Woodwind"){
+      pInst = (Instrument*) new Woodwind(parameters);
+    }
+    else if (name == "genericins"){
+      pInst = (Instrument*) new genericins(parameters);
     }
     return pInst;
   }
