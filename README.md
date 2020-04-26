@@ -294,7 +294,7 @@ El sonido guitarra lleva incorporado este sonido.
 	  }
 	}
 
-<img src="Imagenes/distormostra.jpg" width="640" align="center">
+<img src="Imagenes/distormostra.JPG" width="640" align="center">
 
 Se observa que los senos se han convertido en señales casi cuadradas, saturando así el señal (factor Th = 0.8). 
 
@@ -402,7 +402,7 @@ principal). Esta suma debe ser ponderada para que se aprecie el sonido original 
 		x = xout;
 	}
 	
-<img src="Imagenes/cohrusmostra.jpg" width="640" align="center">
+<img src="Imagenes/cohrusmostra.JPG" width="640" align="center">
 
 El valor de I debe ser bajo para no causar un vibrato muy potente.
 	
