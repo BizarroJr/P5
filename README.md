@@ -461,23 +461,23 @@ Para el disfrute de la realización de la práctica y aposentar los conocimiento
 adquiridos en esta hemos orquestrado varias canciones:
 La Gasolina - Daddy Yankee 
 --------------------------
-// Canción de culto para cualquier verbena. Solo 1 instument
+Canción de culto para cualquier verbena. Solo 1 instument
 synth Gasolina.orc Gasolina.sco gasolina.wav
 Layla - Derek&The Dominos (Eric Clapton)
 -----------------------------------------
-//Canción de Blues/Rock mítica con complicados pasajes a nivel interpretativo. 
+Canción de Blues/Rock mítica con complicados pasajes a nivel interpretativo. 
 Nos ha servido para ver si nuestros sonidos conseguien enfrentarse a curiosidades
 musicales como los bendings, slides, hammer-ons y rapidos cambios de velocidad.
 synth Layla.orc Layla.sco Layla.wav
 Never Gonna Give You Up - Rick Astley
 -------------------------------------
-//Su [.orc] incluye 9 instrumentos distintos, obligándonos a cambiar parámetros 
+Su [.orc] incluye 9 instrumentos distintos, obligándonos a cambiar parámetros 
 de instrumentos para repetirlos más de una vez si que suene a que todo es el mismo
 instrumento. 
 synth NeverGonna.orc NevergonnaGiveU.sco NeverGonnaGiveYouUp.wav
 One Stpe Beyond - Madness
 --------------------------
-//[.orc] cuenta con 5 instrumentos con uno que resalta especialmente melodicamente
+[.orc] cuenta con 5 instrumentos con uno que resalta especialmente melodicamente
 y los otros siendo totalmente ritmicos. Utilizado para comprovar si nuestros sonidos 
 tienen algún sentido musical. 
 synth 1step.orc 1step.sco onestepbeyond.wav
