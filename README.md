@@ -63,8 +63,7 @@ Y en global queda así:
 
 INSTRUMENTO PERCUSIVO 2: 
 ------------------------	
-Para realizarlo hemos decidido los parámetros anteriores, salvo que en este caso hemos decidido incluir un pequeño delay el doremi.sco  
-después de la primera nota quedando así:
+Para realizarlo hemos decidido los parámetros anteriores, salvo que en este caso hemos decidido incluir un pequeño delay el doremi.sco después de la primera nota quedando así:
 
                   (60  8   1   60  10)
 
@@ -417,7 +416,7 @@ deberá venir expresado en semitonos.
   vea, claramente, la correspondencia entre los valores `N1`, `N2` e `I` con la señal obtenida.
 
 
-El vibratoFM nos resulta de la siguiente froma con los parámetros siguientes:
+El vibratoFM nos resulta de la siguiente forma con los parámetros siguientes:
 
 N1=3; N2=2; I=0.0001;
 
