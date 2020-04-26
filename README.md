@@ -402,7 +402,7 @@ principal). Esta suma debe ser ponderada para que se aprecie el sonido original 
 		x = xout;
 	}
 	
-<img src="Imagenes/cohrusmostra.JPG" width="640" align="center">
+<img src="Imagenes/chorusmostra.JPG" width="640" align="center">
 
 El valor de I debe ser bajo para no causar un vibrato muy potente.
 	
