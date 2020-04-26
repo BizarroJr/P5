@@ -1,0 +1,1 @@
+0 Guitar    ADSR_A=0.001; ADSR_D=0.3; ADSR_S=0.6; ADSR_R=0.1; N=40; N1=4; N2=2; vel=0.2; Th=0.8;

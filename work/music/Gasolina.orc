@@ -1,0 +1,1 @@
+0   Kick    ADSR_A=0.0001; ADSR_D=0.2; ADSR_S=0.01; ADSR_R=0.1; N=40; N1=0; N2=25; vel=0.5;
