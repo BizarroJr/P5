@@ -93,87 +93,87 @@ mediante búsqueda de los valores en una tabla.
 
 - Incluya, a continuación, el código del fichero `seno.cpp` con los métodos de la clase Seno.
 
-seno::seno(const std::string &param): adsr(SamplingRate, param) {
-  bActive = false;
-  x.resize(BSIZE);
+		seno::seno(const std::string &param): adsr(SamplingRate, param) {
+		  bActive = false;
+		  x.resize(BSIZE);
 
-  /*
-    You can use the class keyvalue to parse "param" and configure your instrument.
-    Take a Look at keyvalue.h    
-  */
-  KeyValue kv(param);
-  int N;
+		  /*
+		    You can use the class keyvalue to parse "param" and configure your instrument.
+		    Take a Look at keyvalue.h    
+		  */
+		  KeyValue kv(param);
+		  int N;
 
-  if (!kv.to_int("N",N))
-    N = 40; //default value
-  
-  //Create a tbl with one period of a sinusoidal wave
-  tbl.resize(N);
-  float phase = 0, step = 2 * M_PI /(float) N;
-  index = 0;
-  for (int i=0; i < N ; ++i) {
-    tbl[i] = sin(phase);
-    /*Para obtener el fichero tbl.txt habilitar el comment de abajo y en el terminal 
-    poner la línea que crea el .wav añadir al final de la cual añadiremos >tbl.txt*/
-    cout << tbl[i] << "\n"; 
-    phase += step;
-  }
-}
+		  if (!kv.to_int("N",N))
+		    N = 40; //default value
 
-
-void seno::command(long cmd, long note, long vel) {
-  if (cmd == 9) {		//'Key' pressed: attack begins
-    bActive = true;
-    adsr.start();
-    index = 0;
-	  A = vel / 127.;
-    //adding the note: A
-    float f0 = (440.00*pow(2,((float)note-69.00)/12.00))/SamplingRate; 
-    step = tbl.size()*f0;
-  }
-  else if (cmd == 8) {	//'Key' released: sustain ends, release begins
-    adsr.stop();
-  }
-  else if (cmd == 0) {	//Sound extinguished without waiting for release to end
-    adsr.end();
-  }
-}
+		  //Create a tbl with one period of a sinusoidal wave
+		  tbl.resize(N);
+		  float phase = 0, step = 2 * M_PI /(float) N;
+		  index = 0;
+		  for (int i=0; i < N ; ++i) {
+		    tbl[i] = sin(phase);
+		    /*Para obtener el fichero tbl.txt habilitar el comment de abajo y en el terminal 
+		    poner la línea que crea el .wav añadir al final de la cual añadiremos >tbl.txt*/
+		    cout << tbl[i] << "\n"; 
+		    phase += step;
+		  }
+		}
 
 
-const vector<float> & seno::synthesize() {
-  if (not adsr.active()) {
-    x.assign(x.size(), 0);
-    bActive = false;
-    return x;
-  }
-  else if (not bActive)
-    return x;
-  
-  for (unsigned int i=0; i<x.size(); ++i) {
-    if (round(index*step) == tbl.size())
-      index = 0;
+		void seno::command(long cmd, long note, long vel) {
+		  if (cmd == 9) {		//'Key' pressed: attack begins
+		    bActive = true;
+		    adsr.start();
+		    index = 0;
+			  A = vel / 127.;
+		    //adding the note: A
+		    float f0 = (440.00*pow(2,((float)note-69.00)/12.00))/SamplingRate; 
+		    step = tbl.size()*f0;
+		  }
+		  else if (cmd == 8) {	//'Key' released: sustain ends, release begins
+		    adsr.stop();
+		  }
+		  else if (cmd == 0) {	//Sound extinguished without waiting for release to end
+		    adsr.end();
+		  }
+		}
 
-    x[i] = A * tbl[round(index*step)]; 
-    /*Para obtener el fichero x.txt habilitar el comment de abajo y en el terminal 
-    poner la línea que crea el .wav añadir al final de la cual añadiremos >x.txt*/
-    //cout << x[i] << "\n";
-    index++;
-  } 
-  adsr(x); //apply envelope to x and update internal status of ADSR
 
-  /*ofstream output_file("/mnt/c/Users/Patron/Desktop/2020 Q2/PAV/LAB/P5/work");
-  ostream_iterator<int> output_iterator( output_file, "\n" );
-  // Passing all the variables inside the vector from the beginning of the vector to the end.
-  copy( x.begin( ), x.end( ), output_iterator );*/
+		const vector<float> & seno::synthesize() {
+		  if (not adsr.active()) {
+		    x.assign(x.size(), 0);
+		    bActive = false;
+		    return x;
+		  }
+		  else if (not bActive)
+		    return x;
 
-  /*char buffer[256];
-  char *val = getcwd(buffer, sizeof(buffer));
-  if (val) {
-    std::cout << buffer << std::endl;
-  }*/
+		  for (unsigned int i=0; i<x.size(); ++i) {
+		    if (round(index*step) == tbl.size())
+		      index = 0;
 
-  return x;
-}
+		    x[i] = A * tbl[round(index*step)]; 
+		    /*Para obtener el fichero x.txt habilitar el comment de abajo y en el terminal 
+		    poner la línea que crea el .wav añadir al final de la cual añadiremos >x.txt*/
+		    //cout << x[i] << "\n";
+		    index++;
+		  } 
+		  adsr(x); //apply envelope to x and update internal status of ADSR
+
+		  /*ofstream output_file("/mnt/c/Users/Patron/Desktop/2020 Q2/PAV/LAB/P5/work");
+		  ostream_iterator<int> output_iterator( output_file, "\n" );
+		  // Passing all the variables inside the vector from the beginning of the vector to the end.
+		  copy( x.begin( ), x.end( ), output_iterator );*/
+
+		  /*char buffer[256];
+		  char *val = getcwd(buffer, sizeof(buffer));
+		  if (val) {
+		    std::cout << buffer << std::endl;
+		  }*/
+
+		  return x;
+		}
 
 - Explique qué método se ha seguido para asignar un valor a la señal a partir de los contenidos en la tabla,
   e incluya una gráfica en la que se vean claramente (use pelotitas en lugar de líneas) los valores de la tabla y los de la señal generada.
@@ -459,24 +459,32 @@ synth Hawaii.orc Hawaii5-0.sco HawaiiInfernal2.wav
 
 Para el disfrute de la realización de la práctica y aposentar los conocimientos 
 adquiridos en esta hemos orquestrado varias canciones:
+
 La Gasolina - Daddy Yankee 
 --------------------------
+
 Canción de culto para cualquier verbena. Solo 1 instument
 synth Gasolina.orc Gasolina.sco gasolina.wav
+
 Layla - Derek&The Dominos (Eric Clapton)
 -----------------------------------------
+
 Canción de Blues/Rock mítica con complicados pasajes a nivel interpretativo. 
 Nos ha servido para ver si nuestros sonidos conseguien enfrentarse a curiosidades
 musicales como los bendings, slides, hammer-ons y rapidos cambios de velocidad.
 synth Layla.orc Layla.sco Layla.wav
+
 Never Gonna Give You Up - Rick Astley
 -------------------------------------
+
 Su [.orc] incluye 9 instrumentos distintos, obligándonos a cambiar parámetros 
 de instrumentos para repetirlos más de una vez si que suene a que todo es el mismo
 instrumento. 
 synth NeverGonna.orc NevergonnaGiveU.sco NeverGonnaGiveYouUp.wav
+
 One Stpe Beyond - Madness
 --------------------------
+
 [.orc] cuenta con 5 instrumentos con uno que resalta especialmente melodicamente
 y los otros siendo totalmente ritmicos. Utilizado para comprovar si nuestros sonidos 
 tienen algún sentido musical. 
